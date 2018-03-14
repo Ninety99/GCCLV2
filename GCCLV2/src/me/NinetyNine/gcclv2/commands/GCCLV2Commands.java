@@ -24,6 +24,9 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 
 		Player player = (Player) sender;
+		
+		ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
+		BookMeta bookmeta = (BookMeta) book.getItemMeta();
 
 		String gcpf = ChatColor.GREEN + "✔ " + ChatColor.BLACK + "";
 		String gcpr = ChatColor.RED + "✘ " + ChatColor.BLACK + "";
@@ -81,9 +84,7 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 				
 				if (args[0].equalsIgnoreCase("set")) {
 					if (args.length == 1) {
-						for(String changelog: change) {
-							ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
-							BookMeta bookmeta = (BookMeta) book.getItemMeta();
+						for (String changelog : change) {
 							bookmeta.setPages(changelog);
 							book.setItemMeta(bookmeta);
 							
@@ -129,6 +130,20 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 						System.out.println("changed");
 					}
 					return true;
+				}
+				
+				if (args[1].equalsIgnoreCase("page")) {
+					if (args.length == 2) {
+						if (bookmeta.getPageCount() < plugin.getConfig().getInt("maxPages")) {
+							bookmeta.addPage("New page!");
+							player.sendMessage("+1 page");
+						}
+						
+						if (bookmeta.getPageCount() == plugin.getConfig().getInt("maxPages")) {
+							player.sendMessage("Reached the maximum amount of pages!");
+						}
+						return true;
+					}
 				}
 			} else {
 				player.sendMessage("You do not have permissions.");
