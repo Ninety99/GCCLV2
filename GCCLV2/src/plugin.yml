@@ -1,0 +1,16 @@
+name: GCCLV2
+main: me.NinetyNine.gcclv2.GCCLV2
+version: 1.0.0 BETA
+author: NinetyNine(w/ Jono)
+description: Changelog for GuildCraft!
+commands:
+  changelog:
+    usage: /<command>
+    aliases: [cl]
+    description: Shows the changes made.
+    permission: changelog.open
+  gcchangelog:
+    usage: /<command>
+    aliases: [gccl]
+    description: Edits the changes.
+    permission: changelog.admin
