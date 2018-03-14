@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 
 import me.NinetyNine.gcclv2.GCCLV2;
 
@@ -73,6 +76,20 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 						change.remove(1);
 						System.out.println("undo");
 						return true;
+					}
+				}
+				
+				if (args[0].equalsIgnoreCase("set")) {
+					if (args.length == 1) {
+						for(String changelog: change) {
+							ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
+							BookMeta bookmeta = (BookMeta) book.getItemMeta();
+							bookmeta.setPages(changelog);
+							book.setItemMeta(bookmeta);
+							
+							player.sendMessage("Set!");
+							return true;
+						}
 					}
 				}
 
