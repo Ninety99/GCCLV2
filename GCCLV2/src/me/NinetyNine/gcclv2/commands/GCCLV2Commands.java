@@ -3,6 +3,7 @@ package me.NinetyNine.gcclv2.commands;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -27,6 +28,7 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 		
 		ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
 		BookMeta bookmeta = (BookMeta) book.getItemMeta();
+		bookmeta.addPage(" ");
 
 		String gcpf = ChatColor.GREEN + "✔ " + ChatColor.BLACK + "";
 		String gcpr = ChatColor.RED + "✘ " + ChatColor.BLACK + "";
@@ -41,9 +43,17 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 			message += args[i] + " ";
 		}
 		message = message.trim();
+		
+		List<String> pages = bookmeta.getPages();
 
 		if (cmd.getName().equalsIgnoreCase("changelog")) {
 			if (player.hasPermission("changelog.open")) {
+				
+				for (String changelog : change) {
+					bookmeta.setPage(1, changelog);
+					book.setItemMeta(bookmeta);
+					player.getInventory().addItem(book);
+				}
 				return true;
 			} else {
 				return false;
@@ -84,13 +94,15 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 				
 				if (args[0].equalsIgnoreCase("set")) {
 					if (args.length == 1) {
-						for (String changelog : change) {
-							bookmeta.setPages(changelog);
-							book.setItemMeta(bookmeta);
+						//for (String changelog : change) {
+							bookmeta.setAuthor("aXed");
+							bookmeta.setTitle("Changelog");
+							pages.addAll(change);
+							book.setItemMeta((BookMeta) pages);
 							
 							player.sendMessage("Set!");
 							return true;
-						}
+						//}
 					}
 				}
 
