@@ -3,7 +3,6 @@ package me.NinetyNine.gcclv2.commands;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -48,7 +47,7 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 		}
 		message = message.trim();
 
-		List<String> pages = bookmeta.getPages();
+		// List<String> pages = bookmeta.getPages();
 
 		if (cmd.getName().equalsIgnoreCase("changelog")) {
 			if (player.hasPermission("changelog.open")) {
@@ -91,7 +90,12 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 
 				if (args[0].equalsIgnoreCase("undo")) {
 					if (args.length == 1) {
-						change.remove(1);
+						if (!change.isEmpty()) {
+							change.remove(change.size() - 1);
+						} else {
+							player.sendMessage("There are currently no changes made.");
+							return true;
+						}
 						System.out.println("undo");
 						return true;
 					}
