@@ -15,22 +15,22 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
 import me.NinetyNine.gcclv2.GCCLV2;
-import me.NinetyNine.gcclv2.Methods;
-
+ 
 public class GCCLV2Commands implements Listener, CommandExecutor {
 
 	public static ArrayList<String> change = new ArrayList<String>();
 	public static GCCLV2 plugin;
-	public static Methods mtd;
-	public static ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
-	public static BookMeta bookmeta = (BookMeta) book.getItemMeta();
-	public static Date now = new Date();
-	public static SimpleDateFormat format = new SimpleDateFormat("dd MM yyyy");
 
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 
 		Player player = (Player) sender;
-
+		
+		ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
+		BookMeta bookmeta = (BookMeta) book.getItemMeta();
+		
+		Date now = new Date();
+		SimpleDateFormat format = new SimpleDateFormat("dd MM yyyy");
+		
 		String gcpf = ChatColor.GREEN + "✔ " + ChatColor.BLACK + "";
 		String gcpr = ChatColor.RED + "✘ " + ChatColor.BLACK + "";
 		String gcpc = ChatColor.GOLD + "▶ " + ChatColor.BLACK + "";
@@ -87,8 +87,12 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 
 				if (args[0].equalsIgnoreCase("undo")) {
 					if (args.length == 1) {
-						mtd.undo(player);
-						System.out.println("undo");
+						if (!GCCLV2Commands.change.isEmpty()) {
+							GCCLV2Commands.change.remove(GCCLV2Commands.change.size() - 1);
+							System.out.println("undo");
+						} else {
+							player.sendMessage("There are currently no changes made.");
+						}
 						return true;
 					}
 				}
@@ -96,7 +100,10 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 				if (args[0].equalsIgnoreCase("set")) {
 					if (args.length == 1) {
 						if (bookmeta.getPageCount() > plugin.getConfig().getInt("maxPages")) {
-							mtd.page(bookmeta);
+							if (change.contains("NEW_PAGE")) {
+								bookmeta.addPage(" ");
+								return true;
+							} 
 						} else {
 							player.sendMessage("Reached the maximum amount of pages!");
 							return false;
@@ -111,54 +118,57 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 						return true;
 					}
 				}
-			}
 
-			if (args[1].equalsIgnoreCase("date")) {
-				if (args.length == 2) {
-					mtd.addDate();
-					System.out.println("date");
-				}
-				return true;
-			}
-
-			if (args[1].equalsIgnoreCase("fixed")) {
-				if (args.length == 2)
-					player.sendMessage("Usage: /gcchangelog add fixed <change>");
-				else
-					mtd.addFixed(gcpf, message);
-				System.out.println("fixed");
-				return true;
-			}
-
-			if (args[1].equalsIgnoreCase("removed")) {
-				if (args.length == 2) {
-					player.sendMessage("Usage: /gcchangelog add removed <change>");
-				} else
-					mtd.addRemoved(gcpr, message);
-				System.out.println("remove");
-				return true;
-			}
-
-			if (args[1].equalsIgnoreCase("changed")) {
-				if (args.length == 2) {
-					player.sendMessage("Usage: /gcchangelog add changed <change>");
-				} else
-					mtd.addChanged(gcpc, message);
-
-				System.out.println("changed");
-				return true;
-			}
-
-			if (args[1].equalsIgnoreCase("page")) {
-				if (args.length == 2) {
-					mtd.addPage();
-					player.sendMessage("+1 page");
+				if (args[1].equalsIgnoreCase("date")) {
+					if (args.length == 2) {
+						change.add(format.format(now) + "\n");
+						System.out.println("date");
+					}
 					return true;
 				}
+
+				if (args[1].equalsIgnoreCase("fixed")) {
+					if (args.length == 2) {
+						player.sendMessage("Usage: /gcchangelog add fixed <change>");
+					} else {
+						change.add(gcpf + message);
+						System.out.println("fixed");
+						return true;
+					}
+				}
+
+				if (args[1].equalsIgnoreCase("removed")) {
+					if (args.length == 2) {
+						player.sendMessage("Usage: /gcchangelog add removed <change>");
+					} else {
+						change.add(gcpr + message);
+						System.out.println("remove");
+						return true;
+					}
+				}
+
+				if (args[1].equalsIgnoreCase("changed")) {
+					if (args.length == 2) {
+						player.sendMessage("Usage: /gcchangelog add changed <change>");
+					} else {
+						change.add(gcpc + message);
+
+						System.out.println("changed");
+						return true;
+					}
+				}
+
+				if (args[1].equalsIgnoreCase("page")) {
+					if (args.length == 2) {
+						change.add("NEW_PAGE");
+						player.sendMessage("+1 page");
+						return true;
+					}
+				}
+			} else {
+				player.sendMessage("You do not have permissions.");
+				return false;
 			}
-		} else {
-			player.sendMessage("You do not have permissions.");
-			return false;
 		}
 		return true;
 	}
