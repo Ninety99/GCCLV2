@@ -102,8 +102,8 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 
 				if (args[0].equalsIgnoreCase("set")) {
 					if (args.length == 1) {
-						mtd.addPage(bookmeta);
-						
+						mtd.page(bookmeta);
+
 						bookmeta.setAuthor("aXed");
 						bookmeta.setTitle("Changelog");
 
@@ -126,50 +126,39 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 			}
 			// "addFixed"
 			if (args[1].equalsIgnoreCase("fixed")) {
-				if (args.length == 2) {
+				if (args.length == 2)
 					player.sendMessage("Usage: /gcchangelog add fixed <change>");
-				} else {
-					change.add(gcpf + message + "\n");
-					// changesMade.add("addFixed");
-					System.out.println("fixed");
-				}
+				else
+					mtd.addFixed(gcpf, message);
+				System.out.println("fixed");
 				return true;
 			}
 			// "addRemoved"
 			if (args[1].equalsIgnoreCase("removed")) {
 				if (args.length == 2) {
 					player.sendMessage("Usage: /gcchangelog add removed <change>");
-				} else {
-					change.add(gcpr + message + "\n");
-					// changesMade.add("addRemoved");
-					System.out.println("remove");
-				}
+				} else
+					mtd.addRemoved(gcpr, message);
+				System.out.println("remove");
 				return true;
 			}
 			// "addChanged"
 			if (args[1].equalsIgnoreCase("changed")) {
 				if (args.length == 2) {
 					player.sendMessage("Usage: /gcchangelog add changed <change>");
-				} else {
-					change.add(gcpc + message + "\n");
-					// changesMade.add("addChanged");
-					System.out.println("changed");
-				}
+				} else
+					mtd.addChanged(gcpc, message);
+
+				System.out.println("changed");
 				return true;
 			}
 
 			if (args[1].equalsIgnoreCase("page")) {
 				if (args.length == 2) {
-					// if (bookmeta.getPageCount() < plugin.getConfig().getInt("maxPages")) {
-					change.add("NEW_PAGE");
+					mtd.addPage();
 					player.sendMessage("+1 page");
 					return true;
 				}
-
-				// if (bookmeta.getPageCount() == plugin.getConfig().getInt("maxPages")) {
-				// player.sendMessage("Reached the maximum amount of pages!");
-				// }
-				// return true;
 			}
 		} else {
 			player.sendMessage("You do not have permissions.");

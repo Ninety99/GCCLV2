@@ -15,10 +15,26 @@ public class Methods implements Listener {
 			player.sendMessage("There are currently no changes made.");
 	}
 
-	public void addPage(BookMeta bookmeta) {
+	public void page(BookMeta bookmeta) {
 		if (GCCLV2Commands.change.contains("NEW_PAGE")) {
 			GCCLV2Commands.bookmeta.addPage(" ");
 		} else 
 			return;
+	}
+	
+	public void addPage() {
+		GCCLV2Commands.change.add("NEW_PAGE");
+	}
+	
+	public void addFixed(String type, String change) {
+		GCCLV2Commands.change.add(type + change);
+	}
+	
+	public void addChanged(String type, String change) {
+		GCCLV2Commands.change.add(type + change);
+	}
+	
+	public void addRemoved(String type, String change) {
+		GCCLV2Commands.change.add(type + change);
 	}
 }
