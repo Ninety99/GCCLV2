@@ -186,4 +186,12 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 		}
 		return true;
 	}
+	
+	 public void undo(Player player) {
+		 if (!change.isEmpty())
+				change.remove(change.size() - 1);
+			else {
+				player.sendMessage("There are currently no changes made.");
+			}
+	 }
 }
