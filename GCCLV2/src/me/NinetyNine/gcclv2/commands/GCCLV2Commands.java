@@ -51,20 +51,22 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 
 		if (cmd.getName().equalsIgnoreCase("changelog")) {
 			if (player.hasPermission("changelog.open")) {
-
 				for (String changelog : change) {
 					bookmeta.setPage(1, changelog);
 					book.setItemMeta(bookmeta);
 					player.getInventory().addItem(book);
 					return true;
 				}
-			} else {
+			} else
 				return false;
-			}
-			return true;
 		}
 
 		if (cmd.getName().equalsIgnoreCase("gcchangelog")) {
+			if (args.length == 0) {
+				player.sendMessage("Are you sure you typed it correctly?");
+				return true;
+			}
+
 			if (player.hasPermission("gcchangelog.admin")) {
 				if (args.length == 0) {
 					player.sendMessage("Usage: /gcchangelog add <type> <change> or /gcchangelog undo");
@@ -90,12 +92,7 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 
 				if (args[0].equalsIgnoreCase("undo")) {
 					if (args.length == 1) {
-						if (!change.isEmpty()) {
-							change.remove(change.size() - 1);
-						} else {
-							player.sendMessage("There are currently no changes made.");
-							return true;
-						}
+						undo(player);
 						System.out.println("undo");
 						return true;
 					}
@@ -186,12 +183,11 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 		}
 		return true;
 	}
-	
-	 public void undo(Player player) {
-		 if (!change.isEmpty())
-				change.remove(change.size() - 1);
-			else {
-				player.sendMessage("There are currently no changes made.");
-			}
-	 }
+
+	public void undo(Player player) {
+		if (!change.isEmpty())
+			change.remove(change.size() - 1);
+		else
+			player.sendMessage("There are currently no changes made.");
+	}
 }
