@@ -22,25 +22,19 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 	public static ArrayList<String> change = new ArrayList<String>();
 	public static GCCLV2 plugin;
 	public static Methods mtd;
-	// public static List<String> changesMade =
-	// plugin.getConfig().getStringList("changesMade");
-	// public static String clio = ChangelogIO.save(change.get(changesMade.size()),
-	// plugin.getConfig());
 	public static ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
 	public static BookMeta bookmeta = (BookMeta) book.getItemMeta();
+	public static Date now = new Date();
+	public static SimpleDateFormat format = new SimpleDateFormat("dd MM yyyy");
 
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 
 		Player player = (Player) sender;
 
-		bookmeta.addPage(" ");
-
 		String gcpf = ChatColor.GREEN + "✔ " + ChatColor.BLACK + "";
 		String gcpr = ChatColor.RED + "✘ " + ChatColor.BLACK + "";
 		String gcpc = ChatColor.GOLD + "▶ " + ChatColor.BLACK + "";
 
-		Date now = new Date();
-		SimpleDateFormat format = new SimpleDateFormat("dd MM yyyy");
 
 		String message = "";
 
@@ -49,11 +43,10 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 		}
 		message = message.trim();
 
-		// List<String> pages = bookmeta.getPages();
-
 		if (cmd.getName().equalsIgnoreCase("changelog")) {
 			if (player.hasPermission("changelog.open")) {
 				for (String changelog : change) {
+					bookmeta.addPage(" ");
 					bookmeta.setPage(1, changelog);
 					book.setItemMeta(bookmeta);
 					player.getInventory().addItem(book);
@@ -114,17 +107,15 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 					}
 				}
 			}
-			// "addDate"
+
 			if (args[1].equalsIgnoreCase("date")) {
 				if (args.length == 2) {
-					change.add(ChatColor.BOLD + format.format(now) + "\n");
-					// changesMade.add("addDate");
-
+					mtd.addDate();
 					System.out.println("date");
 				}
 				return true;
 			}
-			// "addFixed"
+
 			if (args[1].equalsIgnoreCase("fixed")) {
 				if (args.length == 2)
 					player.sendMessage("Usage: /gcchangelog add fixed <change>");
@@ -133,7 +124,7 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 				System.out.println("fixed");
 				return true;
 			}
-			// "addRemoved"
+
 			if (args[1].equalsIgnoreCase("removed")) {
 				if (args.length == 2) {
 					player.sendMessage("Usage: /gcchangelog add removed <change>");
@@ -142,7 +133,7 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 				System.out.println("remove");
 				return true;
 			}
-			// "addChanged"
+			
 			if (args[1].equalsIgnoreCase("changed")) {
 				if (args.length == 2) {
 					player.sendMessage("Usage: /gcchangelog add changed <change>");

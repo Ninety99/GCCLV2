@@ -37,4 +37,8 @@ public class Methods implements Listener {
 	public void addRemoved(String type, String change) {
 		GCCLV2Commands.change.add(type + change);
 	}
+	
+	public void addDate() {
+		GCCLV2Commands.change.add(GCCLV2Commands.format.format(GCCLV2Commands.now));
+	}
 }
