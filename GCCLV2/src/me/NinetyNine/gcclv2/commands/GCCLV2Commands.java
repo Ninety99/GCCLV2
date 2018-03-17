@@ -62,7 +62,7 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 					player.sendMessage("Are you sure you typed it correctly?");
 					return true;
 				}
-				
+
 				if (args.length == 0) {
 					player.sendMessage("Usage: /gcchangelog add <type> <change> or /gcchangelog undo");
 					System.out.println("gcchangelog add/remove");
@@ -95,7 +95,12 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 
 				if (args[0].equalsIgnoreCase("set")) {
 					if (args.length == 1) {
-						mtd.page(bookmeta);
+						if (bookmeta.getPageCount() > plugin.getConfig().getInt("maxPages")) {
+							mtd.page(bookmeta);
+						} else {
+							player.sendMessage("Reached the maximum amount of pages!");
+							return false;
+						}
 
 						bookmeta.setAuthor("aXed");
 						bookmeta.setTitle("Changelog");
