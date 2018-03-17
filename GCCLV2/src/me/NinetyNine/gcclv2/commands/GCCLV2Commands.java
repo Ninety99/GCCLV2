@@ -35,7 +35,6 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 		String gcpr = ChatColor.RED + "✘ " + ChatColor.BLACK + "";
 		String gcpc = ChatColor.GOLD + "▶ " + ChatColor.BLACK + "";
 
-
 		String message = "";
 
 		for (int i = 2; i < args.length; i++) {
@@ -57,12 +56,13 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 		}
 
 		if (cmd.getName().equalsIgnoreCase("gcchangelog")) {
-			if (args.length == 0) {
-				player.sendMessage("Are you sure you typed it correctly?");
-				return true;
-			}
-
 			if (player.hasPermission("gcchangelog.admin")) {
+
+				if (args.length == 0) {
+					player.sendMessage("Are you sure you typed it correctly?");
+					return true;
+				}
+				
 				if (args.length == 0) {
 					player.sendMessage("Usage: /gcchangelog add <type> <change> or /gcchangelog undo");
 					System.out.println("gcchangelog add/remove");
@@ -133,7 +133,7 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 				System.out.println("remove");
 				return true;
 			}
-			
+
 			if (args[1].equalsIgnoreCase("changed")) {
 				if (args.length == 2) {
 					player.sendMessage("Usage: /gcchangelog add changed <change>");
