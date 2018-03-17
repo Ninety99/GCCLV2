@@ -21,11 +21,15 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 
 	public static ArrayList<String> change = new ArrayList<String>();
 	public static GCCLV2 plugin;
+	// public static List<String> changesMade =
+	// plugin.getConfig().getStringList("changesMade");
+	// public static String clio = ChangelogIO.save(change.get(changesMade.size()),
+	// plugin.getConfig());
 
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 
 		Player player = (Player) sender;
-		
+
 		ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
 		BookMeta bookmeta = (BookMeta) book.getItemMeta();
 		bookmeta.addPage(" ");
@@ -43,21 +47,22 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 			message += args[i] + " ";
 		}
 		message = message.trim();
-		
+
 		List<String> pages = bookmeta.getPages();
 
 		if (cmd.getName().equalsIgnoreCase("changelog")) {
 			if (player.hasPermission("changelog.open")) {
-				
+
 				for (String changelog : change) {
 					bookmeta.setPage(1, changelog);
 					book.setItemMeta(bookmeta);
 					player.getInventory().addItem(book);
+					return true;
 				}
-				return true;
 			} else {
 				return false;
 			}
+			return true;
 		}
 
 		if (cmd.getName().equalsIgnoreCase("gcchangelog")) {
@@ -91,71 +96,84 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 						return true;
 					}
 				}
-				
+
 				if (args[0].equalsIgnoreCase("set")) {
 					if (args.length == 1) {
-						//for (String changelog : change) {
+						// for (String changelog : change) {
+
+						if (change.contains("NEW_PAGE")) {
+							bookmeta.addPage(" ");
+						} else {
 							bookmeta.setAuthor("aXed");
 							bookmeta.setTitle("Changelog");
-							pages.addAll(change);
-							book.setItemMeta((BookMeta) pages);
-							
+							// pages.addAll(change);
+							// bookmeta.setPages(changelog);
+
+							book.setItemMeta(bookmeta);
+
 							player.sendMessage("Set!");
 							return true;
-						//}
+						}
+						// }
 					}
 				}
-
+				// "addDate"
 				if (args[1].equalsIgnoreCase("date")) {
 					if (args.length == 2) {
 						change.add(ChatColor.BOLD + format.format(now) + "\n");
+						// changesMade.add("addDate");
+
 						System.out.println("date");
 					}
 					return true;
 				}
-
+				// "addFixed"
 				if (args[1].equalsIgnoreCase("fixed")) {
 					if (args.length == 2) {
 						player.sendMessage("Usage: /gcchangelog add fixed <change>");
 					} else {
-						change.add("\n" + gcpf + message);
+						change.add(gcpf + message + "\n");
+						// changesMade.add("addFixed");
 						System.out.println("fixed");
 					}
 					return true;
 				}
-
+				// "addRemoved"
 				if (args[1].equalsIgnoreCase("removed")) {
 					if (args.length == 2) {
 						player.sendMessage("Usage: /gcchangelog add removed <change>");
 					} else {
-						change.add("\n" + gcpr + message);
+						change.add(gcpr + message + "\n");
+						// changesMade.add("addRemoved");
 						System.out.println("remove");
 					}
 					return true;
 				}
-
+				// "addChanged"
 				if (args[1].equalsIgnoreCase("changed")) {
 					if (args.length == 2) {
 						player.sendMessage("Usage: /gcchangelog add changed <change>");
 					} else {
-						change.add("\n" + gcpc + message);
+						change.add(gcpc + message + "\n");
+						// changesMade.add("addChanged");
 						System.out.println("changed");
 					}
 					return true;
 				}
-				
+
 				if (args[1].equalsIgnoreCase("page")) {
 					if (args.length == 2) {
-						if (bookmeta.getPageCount() < plugin.getConfig().getInt("maxPages")) {
-							bookmeta.addPage("New page!");
-							player.sendMessage("+1 page");
-						}
-						
-						if (bookmeta.getPageCount() == plugin.getConfig().getInt("maxPages")) {
-							player.sendMessage("Reached the maximum amount of pages!");
-						}
+						// if (bookmeta.getPageCount() < plugin.getConfig().getInt("maxPages")) {
+						change.add("NEW_PAGE");
+						player.sendMessage("+1 page");
+						// changesMade.add("addPage");
 						return true;
 					}
+
+					// if (bookmeta.getPageCount() == plugin.getConfig().getInt("maxPages")) {
+					// player.sendMessage("Reached the maximum amount of pages!");
+					// }
+					// return true;
 				}
 			} else {
 				player.sendMessage("You do not have permissions.");
@@ -164,5 +182,4 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 		}
 		return true;
 	}
-
 }

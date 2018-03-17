@@ -8,15 +8,15 @@ import org.bukkit.event.Listener;
 
 public class ChangelogIO implements Listener {
 	
-	public static String save(ArrayList<String> changes, FileConfiguration config) {
-		config.set("changesMade", changes);
-		return save(changes, config);
+	public static String save(String string, FileConfiguration config) {
+		//config.set("changesMade", changes);
+		return save(string, config);
 	}
 	
-	public static String load(List<String> loadChanges, FileConfiguration config) {
-		loadChanges = config.getStringList("changesMade");
-		config.get("changesMade", loadChanges);
-		config.set("changesMade", loadChanges);
+	public static ArrayList<String> load(List<String> loadChanges, FileConfiguration config) {
+		//loadChanges = config.getStringList("changesMade");
+		//config.get("changesMade", loadChanges);
+		//config.set("changesMade", loadChanges);
 		return load(loadChanges, config);
 	}
 }

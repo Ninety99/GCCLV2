@@ -1,29 +1,25 @@
 package me.NinetyNine.gcclv2;
 
-import java.util.ArrayList;
-
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.NinetyNine.gcclv2.commands.GCCLV2Commands;
 
 public class GCCLV2 extends JavaPlugin {
 	
-	public ArrayList<String> changes;
-	public ArrayList<String> loadChanges;
+	//String changes = ChangelogIO.save((ArrayList<String>) getConfig().getStringList("changesMade"), getConfig());
+	//ArrayList<String> loadChanges = ChangelogIO.load((List<String>) getConfig().getStringList("changesMade"), getConfig());
 	
 	@Override
 	public void onEnable() {
 		getCommand("changelog").setExecutor(new GCCLV2Commands());
 		getCommand("gcchangelog").setExecutor(new GCCLV2Commands());
 		
-		//getConfig().getStringList(ChangelogIO.load(loadChanges, config));
-		//Config.getConfig(this, "config.yml");
-		//Config.getConfigFile(this, "changelog.yml");
+		//String clio = ChangelogIO.save(GCCLV2Commands.change.get(GCCLV2Commands.changesMade.size()), getConfig());
 		
-		getConfig().options().copyDefaults(true);
-		reloadConfig();
-		saveConfig();
 		getServer().getLogger().info("[GCCL] Getting config...");
+		getConfig().options().copyDefaults(true);
+		saveConfig();
+		reloadConfig();
 		getServer().getLogger().info("[GCCL] Enabled!");	
 	}
 	
@@ -31,7 +27,8 @@ public class GCCLV2 extends JavaPlugin {
 	public void onDisable() {
 		//OgetConfig().getStringList(ChangelogIO.save(changes, config));
 		getServer().getLogger().info("[GCCL] Saving config...");
-		reloadConfig();
+		//getConfig().set("changesMade", changes);
+		//getConfig().set("changesMade", loadChanges);
 		saveConfig();
 	}
 
