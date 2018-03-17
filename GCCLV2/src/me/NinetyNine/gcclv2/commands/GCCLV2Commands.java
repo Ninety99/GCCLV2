@@ -15,22 +15,24 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
 import me.NinetyNine.gcclv2.GCCLV2;
+import me.NinetyNine.gcclv2.Methods;
 
 public class GCCLV2Commands implements Listener, CommandExecutor {
 
 	public static ArrayList<String> change = new ArrayList<String>();
 	public static GCCLV2 plugin;
+	public static Methods mtd;
 	// public static List<String> changesMade =
 	// plugin.getConfig().getStringList("changesMade");
 	// public static String clio = ChangelogIO.save(change.get(changesMade.size()),
 	// plugin.getConfig());
+	public static ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
+	public static BookMeta bookmeta = (BookMeta) book.getItemMeta();
 
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 
 		Player player = (Player) sender;
 
-		ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
-		BookMeta bookmeta = (BookMeta) book.getItemMeta();
 		bookmeta.addPage(" ");
 
 		String gcpf = ChatColor.GREEN + "✔ " + ChatColor.BLACK + "";
@@ -92,7 +94,7 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 
 				if (args[0].equalsIgnoreCase("undo")) {
 					if (args.length == 1) {
-						undo(player);
+						mtd.undo(player);
 						System.out.println("undo");
 						return true;
 					}
@@ -100,94 +102,79 @@ public class GCCLV2Commands implements Listener, CommandExecutor {
 
 				if (args[0].equalsIgnoreCase("set")) {
 					if (args.length == 1) {
-						// for (String changelog : change) {
+						mtd.addPage(bookmeta);
+						
+						bookmeta.setAuthor("aXed");
+						bookmeta.setTitle("Changelog");
 
-						if (change.contains("NEW_PAGE")) {
-							bookmeta.addPage(" ");
-						} else {
-							bookmeta.setAuthor("aXed");
-							bookmeta.setTitle("Changelog");
-							// pages.addAll(change);
-							// bookmeta.setPages(changelog);
+						book.setItemMeta(bookmeta);
 
-							book.setItemMeta(bookmeta);
-
-							player.sendMessage("Set!");
-							return true;
-						}
-						// }
-					}
-				}
-				// "addDate"
-				if (args[1].equalsIgnoreCase("date")) {
-					if (args.length == 2) {
-						change.add(ChatColor.BOLD + format.format(now) + "\n");
-						// changesMade.add("addDate");
-
-						System.out.println("date");
-					}
-					return true;
-				}
-				// "addFixed"
-				if (args[1].equalsIgnoreCase("fixed")) {
-					if (args.length == 2) {
-						player.sendMessage("Usage: /gcchangelog add fixed <change>");
-					} else {
-						change.add(gcpf + message + "\n");
-						// changesMade.add("addFixed");
-						System.out.println("fixed");
-					}
-					return true;
-				}
-				// "addRemoved"
-				if (args[1].equalsIgnoreCase("removed")) {
-					if (args.length == 2) {
-						player.sendMessage("Usage: /gcchangelog add removed <change>");
-					} else {
-						change.add(gcpr + message + "\n");
-						// changesMade.add("addRemoved");
-						System.out.println("remove");
-					}
-					return true;
-				}
-				// "addChanged"
-				if (args[1].equalsIgnoreCase("changed")) {
-					if (args.length == 2) {
-						player.sendMessage("Usage: /gcchangelog add changed <change>");
-					} else {
-						change.add(gcpc + message + "\n");
-						// changesMade.add("addChanged");
-						System.out.println("changed");
-					}
-					return true;
-				}
-
-				if (args[1].equalsIgnoreCase("page")) {
-					if (args.length == 2) {
-						// if (bookmeta.getPageCount() < plugin.getConfig().getInt("maxPages")) {
-						change.add("NEW_PAGE");
-						player.sendMessage("+1 page");
-						// changesMade.add("addPage");
+						player.sendMessage("Set!");
 						return true;
 					}
-
-					// if (bookmeta.getPageCount() == plugin.getConfig().getInt("maxPages")) {
-					// player.sendMessage("Reached the maximum amount of pages!");
-					// }
-					// return true;
 				}
-			} else {
-				player.sendMessage("You do not have permissions.");
-				return false;
 			}
+			// "addDate"
+			if (args[1].equalsIgnoreCase("date")) {
+				if (args.length == 2) {
+					change.add(ChatColor.BOLD + format.format(now) + "\n");
+					// changesMade.add("addDate");
+
+					System.out.println("date");
+				}
+				return true;
+			}
+			// "addFixed"
+			if (args[1].equalsIgnoreCase("fixed")) {
+				if (args.length == 2) {
+					player.sendMessage("Usage: /gcchangelog add fixed <change>");
+				} else {
+					change.add(gcpf + message + "\n");
+					// changesMade.add("addFixed");
+					System.out.println("fixed");
+				}
+				return true;
+			}
+			// "addRemoved"
+			if (args[1].equalsIgnoreCase("removed")) {
+				if (args.length == 2) {
+					player.sendMessage("Usage: /gcchangelog add removed <change>");
+				} else {
+					change.add(gcpr + message + "\n");
+					// changesMade.add("addRemoved");
+					System.out.println("remove");
+				}
+				return true;
+			}
+			// "addChanged"
+			if (args[1].equalsIgnoreCase("changed")) {
+				if (args.length == 2) {
+					player.sendMessage("Usage: /gcchangelog add changed <change>");
+				} else {
+					change.add(gcpc + message + "\n");
+					// changesMade.add("addChanged");
+					System.out.println("changed");
+				}
+				return true;
+			}
+
+			if (args[1].equalsIgnoreCase("page")) {
+				if (args.length == 2) {
+					// if (bookmeta.getPageCount() < plugin.getConfig().getInt("maxPages")) {
+					change.add("NEW_PAGE");
+					player.sendMessage("+1 page");
+					return true;
+				}
+
+				// if (bookmeta.getPageCount() == plugin.getConfig().getInt("maxPages")) {
+				// player.sendMessage("Reached the maximum amount of pages!");
+				// }
+				// return true;
+			}
+		} else {
+			player.sendMessage("You do not have permissions.");
+			return false;
 		}
 		return true;
-	}
-
-	public void undo(Player player) {
-		if (!change.isEmpty())
-			change.remove(change.size() - 1);
-		else
-			player.sendMessage("There are currently no changes made.");
 	}
 }
